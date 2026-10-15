@@ -1,13 +1,5 @@
-# Local development: database from docker-compose.yml, human-readable logs.
-spring:
-  datasource:
-    username: ${DB_USERNAME:expense}
-    password: ${DB_PASSWORD:expense}
-  jpa:
-    properties:
-      hibernate:
-        format_sql: true
-
 logging:
   level:
     org.limir.expensetracker: DEBUG
+    # Logbook writes HTTP requests/responses at TRACE level
+    org.zalando.logbook.Logbook: TRACE

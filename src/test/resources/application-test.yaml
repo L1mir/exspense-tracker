@@ -1,6 +1,5 @@
-# Tests: datasource is provided by Testcontainers (@ServiceConnection), logs stay quiet.
+# The datasource comes from Testcontainers (@ServiceConnection)
 logging:
   level:
-    root: WARN
     org.limir.expensetracker: DEBUG
     org.zalando.logbook.Logbook: TRACE

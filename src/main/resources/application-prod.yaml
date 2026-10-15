@@ -1,0 +1,11 @@
+# Production: every connection setting must come from environment variables, logs are JSON.
+spring:
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+logging:
+  level:
+    root: INFO
+    org.limir.expensetracker: INFO

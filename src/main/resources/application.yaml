@@ -23,6 +23,10 @@ spring:
     problemdetails:
       enabled: true
 
+app:
+  # Month boundaries and the transaction day are calculated in this time zone
+  time-zone: Asia/Almaty
+
 logbook:
   obfuscate:
     # The exchange-rate API key is passed as a query parameter; never write it to logs

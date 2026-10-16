@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.limir.expensetracker.common.MoneyUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 
@@ -16,8 +17,6 @@ import org.springframework.web.client.RestClientException;
 @RequiredArgsConstructor
 public class ExchangeRateService {
 
-    private static final String USD = "USD";
-
     private final ExchangeRateRepository repository;
     private final ExchangeRateProvider provider;
 
@@ -27,7 +26,7 @@ public class ExchangeRateService {
      * @throws ExchangeRateUnavailableException if the provider fails and the database has no earlier rate
      */
     public BigDecimal getUsdRate(String currency, LocalDate date) {
-        if (USD.equals(currency)) {
+        if (MoneyUtils.USD.equals(currency)) {
             return BigDecimal.ONE;
         }
         return repository.findByCurrencyAndRateDate(currency, date)

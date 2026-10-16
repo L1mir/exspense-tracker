@@ -26,6 +26,8 @@ spring:
 app:
   # Month boundaries and the transaction day are calculated in this time zone
   time-zone: Asia/Almaty
+  # Monthly limit in USD when the client has not set one
+  default-limit: 1000.00
   twelve-data:
     base-url: https://api.twelvedata.com
     # Secret: set the TWELVEDATA_API_KEY environment variable, never commit the key

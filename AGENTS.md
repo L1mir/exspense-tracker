@@ -11,9 +11,10 @@ USD limit per account and category (`product` / `service`, default 1000 USD).
 ## Commands
 
 ```bash
-docker compose up -d     # local PostgreSQL (dev profile)
-./mvnw verify            # unit tests (*Test) + integration tests (*IT); Docker must be running
-./mvnw spring-boot:run   # needs TWELVEDATA_API_KEY; Swagger UI at http://localhost:8080/swagger-ui.html
+docker compose up --build        # whole service + PostgreSQL in Docker (needs TWELVEDATA_API_KEY)
+docker compose up -d postgres    # only PostgreSQL, for running the app locally
+./mvnw verify                    # unit tests (*Test) + integration tests (*IT); Docker must be running
+./mvnw spring-boot:run           # needs TWELVEDATA_API_KEY; Swagger UI at http://localhost:8080/swagger-ui.html
 ```
 
 ## Structure (`src/main/java/org/limir/expensetracker`)

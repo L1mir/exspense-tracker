@@ -1,0 +1,9 @@
+target/
+.git/
+.idea/
+.github/
+.agents/
+.claude/
+docker/
+*.md
+.env

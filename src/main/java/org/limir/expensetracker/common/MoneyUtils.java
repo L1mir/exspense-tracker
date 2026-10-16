@@ -15,6 +15,11 @@ public final class MoneyUtils {
     private MoneyUtils() {
     }
 
+    /** Brings an amount to the stored form with 2 decimal places: 30 becomes 30.00. */
+    public static BigDecimal toMoney(BigDecimal amount) {
+        return amount.setScale(MONEY_SCALE, RoundingMode.HALF_UP);
+    }
+
     /**
      * Converts an amount to USD.
      *

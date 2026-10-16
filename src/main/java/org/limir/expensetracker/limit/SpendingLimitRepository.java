@@ -1,6 +1,7 @@
 package org.limir.expensetracker.limit;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -25,4 +26,6 @@ public interface SpendingLimitRepository extends JpaRepository<SpendingLimit, Lo
             LIMIT 1
             """, nativeQuery = true)
     Optional<SpendingLimit> findActiveLimit(String accountNumber, String category, Instant moment);
+
+    List<SpendingLimit> findAllByAccountNumberOrderBySetAtDesc(String accountNumber);
 }

@@ -3,6 +3,8 @@ package org.limir.expensetracker.limit;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.limir.expensetracker.account.Account;
@@ -28,10 +30,18 @@ public class LimitService {
     @Transactional
     public SpendingLimit setLimit(String accountNumber, ExpenseCategory category, BigDecimal amount) {
         Account account = accountService.lockOrCreate(accountNumber);
+        // Seconds are enough for a limit date and keep the API output readable
+        Instant now = Instant.now(clock).truncatedTo(ChronoUnit.SECONDS);
         SpendingLimit limit = limitRepository.save(
-                new SpendingLimit(account, category, amount, MoneyUtils.USD, Instant.now(clock)));
+                new SpendingLimit(account, category, MoneyUtils.toMoney(amount), MoneyUtils.USD, now));
         log.info("Set {} limit {} USD for account {}", category, amount, accountNumber);
         return limit;
+    }
+
+    /** All limits of the account, newest first. */
+    @Transactional(readOnly = true)
+    public List<SpendingLimit> getLimits(String accountNumber) {
+        return limitRepository.findAllByAccountNumberOrderBySetAtDesc(accountNumber);
     }
 
     /**

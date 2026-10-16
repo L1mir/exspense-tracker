@@ -3,6 +3,7 @@ package org.limir.expensetracker.transaction;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.limir.expensetracker.account.Account;
@@ -14,6 +15,7 @@ import org.limir.expensetracker.limit.LimitService;
 import org.limir.expensetracker.limit.SpendingLimit;
 import org.limir.expensetracker.rate.ExchangeRateService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionTemplate;
 
 @Slf4j
@@ -46,6 +48,12 @@ public class TransactionService {
         return transactionTemplate.execute(status -> saveWithLimitCheck(request, moment, sumUsd));
     }
 
+    /** Transactions of the account that exceeded the monthly limit, oldest first. */
+    @Transactional(readOnly = true)
+    public List<ExpenseTransaction> getExceeded(String accountNumber) {
+        return transactionRepository.findExceeded(accountNumber);
+    }
+
     private ExpenseTransaction saveWithLimitCheck(TransactionRequest request, Instant moment, BigDecimal sumUsd) {
         Account account = accountService.lockOrCreate(request.accountFrom());
         SpendingLimit limit = limitService.getOrCreateActiveLimit(account, request.expenseCategory(), moment);
@@ -61,7 +69,7 @@ public class TransactionService {
                 .accountFrom(account)
                 .accountTo(request.accountTo())
                 .currency(request.currencyShortname())
-                .sum(request.sum())
+                .sum(MoneyUtils.toMoney(request.sum()))
                 .category(request.expenseCategory())
                 .datetime(moment)
                 .sumUsd(sumUsd)

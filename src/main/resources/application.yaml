@@ -22,6 +22,10 @@ spring:
   mvc:
     problemdetails:
       enabled: true
+  web:
+    # Validation messages in English regardless of the server's system language
+    locale: en
+    locale-resolver: fixed
 
 app:
   # Month boundaries and the transaction day are calculated in this time zone

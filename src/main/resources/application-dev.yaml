@@ -1,5 +1,4 @@
 logging:
   level:
     org.limir.expensetracker: DEBUG
-    # Logbook writes HTTP requests/responses at TRACE level
     org.zalando.logbook.Logbook: TRACE

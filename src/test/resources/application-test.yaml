@@ -1,7 +1,5 @@
-# The datasource comes from Testcontainers (@ServiceConnection)
 app:
   twelve-data:
-    # Tests never call the real API: it is replaced by WireMock or a mock
     api-key: test-key
     read-timeout: 1s
     retry-delay: 10ms

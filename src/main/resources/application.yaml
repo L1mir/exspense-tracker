@@ -6,8 +6,7 @@ spring:
   threads:
     virtual:
       enabled: true
-  # Local database from docker-compose.yml.
-  # In other environments override with SPRING_DATASOURCE_URL / _USERNAME / _PASSWORD.
+  # Local docker-compose DB; elsewhere override with SPRING_DATASOURCE_URL / _USERNAME / _PASSWORD.
   datasource:
     url: jdbc:postgresql://localhost:5432/expense_tracker
     username: expense
@@ -15,7 +14,6 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      # Schema is created by Flyway migrations; Hibernate only checks that entities match it
       ddl-auto: validate
   jackson:
     property-naming-strategy: SNAKE_CASE
@@ -23,14 +21,11 @@ spring:
     problemdetails:
       enabled: true
   web:
-    # Validation messages in English regardless of the server's system language
     locale: en
     locale-resolver: fixed
 
 app:
-  # Month boundaries and the transaction day are calculated in this time zone
   time-zone: Asia/Almaty
-  # Monthly limit in USD when the client has not set one
   default-limit: 1000.00
   twelve-data:
     base-url: https://api.twelvedata.com
@@ -38,6 +33,5 @@ app:
     api-key: ${TWELVEDATA_API_KEY:}
     connect-timeout: 2s
     read-timeout: 5s
-    # Retries after the first failed attempt; the delay doubles each time (500ms, 1s)
     max-retries: 2
     retry-delay: 500ms

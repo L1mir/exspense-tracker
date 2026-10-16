@@ -6,10 +6,6 @@ import org.springframework.context.annotation.Bean;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
 
-/**
- * Starts a real PostgreSQL in Docker for integration tests.
- * {@link ServiceConnection} wires the container's URL and credentials into the datasource.
- */
 @TestConfiguration(proxyBeanMethods = false)
 public class TestcontainersConfiguration {
 

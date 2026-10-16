@@ -5,7 +5,6 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
-/** Clock for tests whose time can be moved, e.g. to reproduce the scenarios from the assignment table. */
 public class MutableClock extends Clock {
 
     private volatile Instant instant;
@@ -16,7 +15,6 @@ public class MutableClock extends Clock {
         this.zone = zone;
     }
 
-    /** Moves the clock, e.g. {@code setTime("2022-01-10T00:00:00+06:00")}. */
     public void setTime(String isoDateTime) {
         this.instant = OffsetDateTime.parse(isoDateTime).toInstant();
     }

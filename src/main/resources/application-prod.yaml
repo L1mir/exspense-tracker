@@ -1,5 +1,4 @@
 logging:
   structured:
     format:
-      # JSON logs (Elastic Common Schema) for log collection systems
       console: ecs

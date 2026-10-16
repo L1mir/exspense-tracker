@@ -6,7 +6,6 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/** Swagger UI (/swagger-ui.html) with the two APIs shown as separate groups. */
 @Configuration
 public class OpenApiConfig {
 

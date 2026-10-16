@@ -26,9 +26,12 @@ spring:
 app:
   # Month boundaries and the transaction day are calculated in this time zone
   time-zone: Asia/Almaty
-
-logbook:
-  obfuscate:
-    # The exchange-rate API key is passed as a query parameter; never write it to logs
-    parameters:
-      - apikey
+  twelve-data:
+    base-url: https://api.twelvedata.com
+    # Secret: set the TWELVEDATA_API_KEY environment variable, never commit the key
+    api-key: ${TWELVEDATA_API_KEY:}
+    connect-timeout: 2s
+    read-timeout: 5s
+    # Retries after the first failed attempt; the delay doubles each time (500ms, 1s)
+    max-retries: 2
+    retry-delay: 500ms

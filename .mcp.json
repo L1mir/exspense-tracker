@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@upstash/context7-mcp@4.4.2"]
+    },
+    "postgres": {
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@microsoft/postgres-mcp@0.2.0", "run"],
+      "env": {
+        "POSTGRES_MCP_CONNECTION_STRING": "postgresql://expense_readonly:${MCP_DB_PASSWORD}@localhost:5432/expense_tracker"
+      }
+    }
+  }
+}

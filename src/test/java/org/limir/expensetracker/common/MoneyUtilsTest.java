@@ -21,6 +21,11 @@ class MoneyUtilsTest {
     }
 
     @Test
+    void toMoneyAddsCents() {
+        assertThat(MoneyUtils.toMoney(new BigDecimal("30"))).isEqualTo(new BigDecimal("30.00"));
+    }
+
+    @Test
     void usdRateOfOneKeepsAmount() {
         assertThat(MoneyUtils.toUsd(new BigDecimal("600.00"), BigDecimal.ONE))
                 .isEqualTo(new BigDecimal("600.00"));

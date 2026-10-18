@@ -25,6 +25,7 @@ docker compose up -d postgres    # only PostgreSQL, for running the app locally
 | `service` | `TransactionService` (limit check), `LimitService`, `AccountService` (row lock), `ExchangeRateService` |
 | `repository` | Spring Data repositories, native SQL for the active limit and upserts |
 | `entity`, `dto`, `mapper` | JPA entities, request/response records, MapStruct mappers |
+| `validation` | custom Bean Validation constraints (`@IsoCurrency`) |
 | `client` | `ExchangeRateProvider` and its twelvedata implementation |
 | `exception` | `GlobalExceptionHandler` (ProblemDetail), `ExchangeRateUnavailableException` (503) |
 | `config`, `util` | `AppProperties` (`app.*`), `Clock` bean, OpenAPI; `MoneyUtils`, `DateTimeUtils` |

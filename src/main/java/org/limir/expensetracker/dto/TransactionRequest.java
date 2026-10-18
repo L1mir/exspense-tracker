@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import org.limir.expensetracker.entity.ExpenseCategory;
 import org.limir.expensetracker.util.ValidationPatterns;
+import org.limir.expensetracker.validation.IsoCurrency;
 
 public record TransactionRequest(
         @Schema(description = "Client account, 10 digits", example = "0000000123")
@@ -20,7 +21,7 @@ public record TransactionRequest(
         String accountTo,
 
         @Schema(description = "ISO 4217 currency code", example = "KZT")
-        @NotNull @Pattern(regexp = ValidationPatterns.CURRENCY_CODE, message = "must be an ISO 4217 code, e.g. KZT")
+        @NotNull @IsoCurrency
         String currencyShortname,
 
         @Schema(description = "Amount with up to 2 decimal places", example = "10000.45")

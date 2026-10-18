@@ -113,6 +113,15 @@ class IntegrationTransactionControllerTest {
     }
 
     @Test
+    void notExistingCurrencyIsBadRequestNotServiceUnavailable() throws Exception {
+        String request = VALID_REQUEST.replace("\"KZT\"", "\"XYZ\"");
+
+        mockMvc.perform(post(URL).contentType(MediaType.APPLICATION_JSON).content(request))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors.currency_shortname").value("must be an ISO 4217 currency code, e.g. KZT"));
+    }
+
+    @Test
     void missingExchangeRateReturns503() throws Exception {
         when(transactionService.process(any()))
                 .thenThrow(new ExchangeRateUnavailableException("No KZT rate on or before 2022-01-30"));

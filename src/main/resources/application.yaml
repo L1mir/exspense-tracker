@@ -24,6 +24,15 @@ spring:
     locale: en
     locale-resolver: fixed
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, metrics
+  endpoint:
+    health:
+      show-details: always
+
 app:
   time-zone: Asia/Almaty
   default-limit: 1000.00

@@ -13,6 +13,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,6 +59,9 @@ class ExchangeRateIT {
     @Autowired
     private ExchangeRateRepository repository;
 
+    @Autowired
+    private MeterRegistry meterRegistry;
+
     @BeforeEach
     void cleanDatabase() {
         repository.deleteAll();
@@ -76,6 +81,16 @@ class ExchangeRateIT {
 
         // 1 / 450 rounded to 10 digits
         assertThat(rate).isEqualByComparingTo("0.0022222222");
+    }
+
+    @Test
+    void callsToProviderAreMeasured() {
+        twelveData.stubFor(get(urlPathEqualTo("/time_series")).willReturn(okJson(USD_KZT_450)));
+        long before = timeSeriesCalls();
+
+        provider.getUsdRate("KZT", DATE);
+
+        assertThat(timeSeriesCalls()).isEqualTo(before + 1);
     }
 
     @Test
@@ -134,5 +149,12 @@ class ExchangeRateIT {
         twelveData.stubFor(get(urlPathEqualTo("/time_series")).willReturn(aResponse().withStatus(503)));
 
         assertThat(service.getUsdRate("KZT", DATE)).isEqualByComparingTo("0.0021");
+    }
+
+    private long timeSeriesCalls() {
+        return meterRegistry.find("http.client.requests").timers().stream()
+                .filter(timer -> String.valueOf(timer.getId().getTag("uri")).contains("time_series"))
+                .mapToLong(Timer::count)
+                .sum();
     }
 }

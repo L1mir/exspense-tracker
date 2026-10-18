@@ -9,16 +9,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.limir.expensetracker.client.ExchangeRateProvider;
 import org.limir.expensetracker.entity.ExchangeRate;
 import org.limir.expensetracker.exception.ExchangeRateUnavailableException;
 import org.limir.expensetracker.repository.ExchangeRateRepository;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.ResourceAccessException;
@@ -35,8 +36,14 @@ class ExchangeRateServiceTest {
     @Mock
     private ExchangeRateProvider provider;
 
-    @InjectMocks
+    private final SimpleMeterRegistry meterRegistry = new SimpleMeterRegistry();
+
     private ExchangeRateService service;
+
+    @BeforeEach
+    void setUp() {
+        service = new ExchangeRateService(repository, provider, meterRegistry);
+    }
 
     @Test
     void usdRateIsAlwaysOne() {
@@ -53,6 +60,7 @@ class ExchangeRateServiceTest {
         assertThat(service.getUsdRate("KZT", DATE)).isEqualByComparingTo(KZT_RATE);
 
         verifyNoInteractions(provider);
+        assertThat(lookups("database")).isEqualTo(1);
     }
 
     @Test
@@ -63,6 +71,7 @@ class ExchangeRateServiceTest {
         assertThat(service.getUsdRate("KZT", DATE)).isEqualByComparingTo(KZT_RATE);
 
         verify(repository).insertIfAbsent("KZT", DATE, KZT_RATE);
+        assertThat(lookups("provider")).isEqualTo(1);
     }
 
     @Test
@@ -76,6 +85,7 @@ class ExchangeRateServiceTest {
         assertThat(service.getUsdRate("KZT", DATE)).isEqualByComparingTo(previousRate);
 
         verify(repository, never()).insertIfAbsent(anyString(), any(), any());
+        assertThat(lookups("fallback")).isEqualTo(1);
     }
 
     @Test
@@ -88,5 +98,9 @@ class ExchangeRateServiceTest {
         assertThatThrownBy(() -> service.getUsdRate("KZT", DATE))
                 .isInstanceOf(ExchangeRateUnavailableException.class)
                 .hasMessageContaining("KZT");
+    }
+
+    private double lookups(String source) {
+        return meterRegistry.counter(ExchangeRateService.LOOKUPS_METRIC, "source", source).count();
     }
 }

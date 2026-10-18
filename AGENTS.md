@@ -22,7 +22,7 @@ docker compose up -d postgres    # only PostgreSQL, for running the app locally
 | Package | Content |
 |---|---|
 | `controller` | `IntegrationTransactionController` (`/integration/v1`), `ClientLimitController` and `ClientTransactionController` (`/client/v1`) |
-| `service` | `TransactionService` (limit check), `LimitService`, `AccountService` (row lock), `ExchangeRateService` |
+| `service` | `TransactionService` (limit check), `LimitService`, `AccountService` (row lock), `ExchangeRateService`, `RatePrefetchService` (parallel daily rate loading) |
 | `repository` | Spring Data repositories, native SQL for the active limit and upserts |
 | `entity`, `dto`, `mapper` | JPA entities, request/response records, MapStruct mappers |
 | `validation` | custom Bean Validation constraints (`@IsoCurrency`) |

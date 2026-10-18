@@ -1,4 +1,7 @@
 app:
+  # No background calls to the mocked API: tests stub every request themselves
+  rate-prefetch:
+    currencies: []
   twelve-data:
     api-key: test-key
     read-timeout: 1s

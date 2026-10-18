@@ -27,6 +27,9 @@ spring:
 app:
   time-zone: Asia/Almaty
   default-limit: 1000.00
+  rate-prefetch:
+    currencies: KZT, RUB
+    cron: "0 5 0 * * *"
   twelve-data:
     base-url: https://api.twelvedata.com
     # Secret: set the TWELVEDATA_API_KEY environment variable, never commit the key
